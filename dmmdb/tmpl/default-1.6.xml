@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Distributed Multi-Media Database">
+		<message>Distributed Multi-Media Database Component </message>
+	</layout>
+        <fields
+                group="request"
+                array="true"
+                required="true"
+                label="Distributed Multi-media Database"
+                description="Choose a Distributed Multi-media Database channel"
+                addfieldpath="/administrator/components/com_dmmdb/select">
+                <field
+                        name="id"
+                        type="dmmdb"
+                        default="0"
+                        label="Dmmdb"
+                        description="Choose a Distributed Multi-media Database channel"
+                        required="true"
+                        />
+        </fields>
+</metadata>

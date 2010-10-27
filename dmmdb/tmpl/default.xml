@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Distributed Multi-Media Database">
+		<message>Distributed Multi-Media Database Component </message>
+	</layout>
+	<state>
+		<name>Distributed Multi-Media Database</name>
+		<description>Embed video and audio files in Joomla!</description>
+                <url addpath="/administrator/components/com_dmmdb/select">
+                <param name="id" type="dmmdb" default="0" label="Dmmdb" description="Distributed Multi-media Database" />
+                </url>
+		<params />
+	</state>
+</metadata>

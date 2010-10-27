@@ -1,0 +1,294 @@
+<?php
+// $Id: dmmdb.module,v 1.0 2010/10/10 11:41:13 sofiethic Exp $
+
+function dmmdb_help($path, $arg) {
+	$output = '';
+	switch ($path) {
+	case "admin/help#dmmdb":
+		$output = '<p>'.  t('Dmmdb module for Drupal!<br /><br />Create a block, e.g. a dmmdb page in your Drupal!'). '</p>';
+	break;
+  }
+  return $output;
+}
+
+include_once('dmmdb.php');
+
+function dmmdb_block($op = 'list', $delta = 0, $edit = array()) {
+	switch ($op) {
+		case "list":
+			$blocks[0] = array(
+		        'info' => t('Dmmdb')
+		        , 'weight' => 0
+		        , 'status' => 1
+		        , 'cache' => BLOCK_NO_CACHE
+		        , 'region' => 'left');
+    		return $blocks;
+    	break;
+
+		case "configure":
+			if($delta == 0) {
+				
+				$form['title'] = array(
+			      '#type' => 'textfield',
+			      '#title' => t('Title of block'),
+			      '#default_value' => variable_get('dmmdb_title', 'Dmmdb'),
+			    );
+				
+				$form['url'] = array(
+			      '#type' => 'textfield',
+			      '#title' => t('Server url of your dmmdb'),
+			      '#default_value' => variable_get('dmmdb_url', 'http://giss.tv/dmmdbflv'),
+			    );
+			
+				$form['channels'] = array(
+			      '#type' => 'textfield',
+			      '#title' => t('List of channels or "all" for all channels'),
+			      '#default_value' => variable_get('dmmdb_channels', 'all'),
+			    );
+			    
+			    // ?????
+			    $form['fullname'] = array(
+			      '#type' => 'textfield',
+			      '#title' => t('Full name url'),
+			      '#default_value' => variable_get('dmmdb_fullname', 'http://giss.tv/dmmdbflv'),
+			    );
+			    
+	            $form['nbmaxchannels'] = array(
+				      '#type' => 'textfield',
+				      '#title' => t('Maximum number of channels'),
+				      '#default_value' => variable_get('dmmdb_nbmaxchannels', '10'),
+				);
+				
+				$form['width'] = array(
+				      '#type' => 'textfield',
+				      '#title' => t('Width of the component'),
+				      '#default_value' => variable_get('dmmdb_width', '400'),
+				);
+				
+				$form['nbitems'] = array(
+				      '#type' => 'textfield',
+				      '#title' => t('Number of videos per menu'),
+				      '#default_value' => variable_get('dmmdb_nbitems', '6'),
+				);
+            
+           		$form['modal'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show videos in a pop-up window'),
+				      '#return_value' => 1,  					  
+				      '#default_value' => variable_get('dmmdb_modal', '1'),
+				);
+				
+				$form['comments'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show comments on media'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_comments', '1'),
+				);
+				
+				$form['search'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show search window'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_search', '1'),
+				);
+				
+				$form['latest_videos'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show latest videos'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_latest_videos', '1'),
+				);
+
+				$form['most_viewed'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show most viewed'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_most_viewed', '0'),
+				);
+
+				$form['favorites'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show favorites'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_favorites', '0'),
+				);
+				
+				$form['categories'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show categories'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_categories', '0'),
+				);
+
+				$form['same_author'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show videos of the same author'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_same_author', '0'),
+				);
+
+				$form['same_category'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show videos of the same category'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_same_category', '0'),
+				);
+				
+				$form['same_keywords'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show videos of the same keywords'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_same_keywords', '0'),
+				);
+				
+				$form['playlists'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show playlists'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_playlists', '0'),
+				);
+				
+				$form['friend_channels'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show friend channels'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_friend_channels', '0'),
+				);
+				
+				$form['latest_on_friend_channels'] = array(
+				      '#type' => 'checkbox',
+				      '#title' => t('Show latest media on friend channels'),
+				      '#return_value' => 1, 
+				      '#default_value' => variable_get('dmmdb_latest_on_friend_channels', '0'),
+				);
+				
+				$form['text_color'] = array(
+				      '#type' => 'textfield',
+				      '#title' => t('Text color'),
+				      '#default_value' => variable_get('dmmdb_text_color', '1387dc'),
+				);
+
+				$form['background_color'] = array(
+				      '#type' => 'textfield',
+				      '#title' => t('Background color'),
+				      '#default_value' => variable_get('dmmdb_background_color', 'FFFFFF'),
+				);
+				
+				$form['tip_text_color'] = array(
+				      '#type' => 'textfield',
+				      '#title' => t('Tip text color'),
+				      '#default_value' => variable_get('dmmdb_tip_text_color', 'FFFFFF'),
+				);
+				
+				$form['tip_bg_color'] = array(
+				      '#type' => 'textfield',
+				      '#title' => t('Tip background color'),
+				      '#default_value' => variable_get('dmmdb_tip_bg_color', '1387dc'),
+				);
+				
+				$form['link_color'] = array(
+				      '#type' => 'textfield',
+				      '#title' => t('Link color'),
+				      '#default_value' => variable_get('dmmdb_link_color', '1387dc'),
+				);			
+
+			    return $form;
+			}
+		break;
+		
+		case "save":
+			if($delta == 0) {
+				variable_set('dmmdb_title', $edit['title']);
+				variable_set('dmmdb_url', $edit['url']);
+			    variable_set('dmmdb_channels', $edit['channels']);
+			    variable_set('dmmdb_fullname', $edit['fullname']);
+			    variable_set('dmmdb_nbmaxchannels', $edit['nbmaxchannels']);
+			    variable_set('dmmdb_width', $edit['width']);
+			    variable_set('dmmdb_nbitems', $edit['nbitems']);
+			    variable_set('dmmdb_modal', $edit['modal']);
+			    variable_set('dmmdb_comments', $edit['comments']);
+			    variable_set('dmmdb_search', $edit['search']);
+			    variable_set('dmmdb_latest_videos', $edit['latest_videos']);
+			    variable_set('dmmdb_most_viewed', $edit['most_viewed']);
+			    variable_set('dmmdb_favorites', $edit['favorites']);
+			    variable_set('dmmdb_categories', $edit['categories']);
+			    variable_set('dmmdb_same_author', $edit['same_author']);
+			    variable_set('dmmdb_same_category', $edit['same_category']);
+			    variable_set('dmmdb_same_keywords', $edit['same_keywords']);
+			    variable_set('dmmdb_playlists', $edit['playlists']);
+			    variable_set('dmmdb_friend_channels', $edit['friend_channels']);
+			    variable_set('dmmdb_latest_on_friend_channels', $edit['latest_on_friend_channels']);
+			    variable_set('dmmdb_text_color', $edit['text_color']);
+			    variable_set('dmmdb_background_color', $edit['background_color']);
+			    variable_set('dmmdb_tip_text_color', $edit['tip_text_color']);
+			    variable_set('dmmdb_tip_bg_color', $edit['tip_bg_color']);
+			    variable_set('dmmdb_link_color', $edit['link_color']);
+			}
+		break;
+		
+		case "view":
+			  switch($delta) {
+		      	case 0:
+		        	$block = array(
+		        		'subject' => variable_get('dmmdb_title', ''),		        		
+		        		'content' => dmmdb_display_block(variable_get('id', ''), 
+		        			variable_get('dmmdb_title', 'Dmmdb'), variable_get('dmmdb_url', 'http://giss.tv/dmmdbflv'), 
+		        			variable_get('dmmdb_channels', 'all'), variable_get('dmmdb_fullname', 'http://giss.tv/dmmdbflv::all'), 
+		        			variable_get('dmmdb_nbmaxchannels', '10'), variable_get('dmmdb_width', '400'), 
+		        			variable_get('dmmdb_nbitems', '6'), variable_get('dmmdb_modal', '1'), 
+		        			variable_get('dmmdb_comments', '1'), variable_get('dmmdb_search', '1'), 
+		        			variable_get('dmmdb_latest_videos', '1'), variable_get('dmmdb_most_viewed', '0'), 
+		        			variable_get('dmmdb_favorites', '0'), variable_get('dmmdb_categories', '0'), 
+		        			variable_get('dmmdb_same_author', '0'), variable_get('dmmdb_same_category', '0'), 
+		        			variable_get('dmmdb_same_keywords', '0'), variable_get('dmmdb_playlists', '0'), 
+		        			variable_get('dmmdb_friend_channels', '0'), variable_get('dmmdb_latest_on_friend_channels', '0'), 
+		        			variable_get('dmmdb_text_color', '1387dc'), variable_get('dmmdb_background_color', 'FFFFFF'), 
+		        			variable_get('dmmdb_tip_text_color', 'FFFFFF'), variable_get('dmmdb_tip_bg_color', '1387dc'), 
+		        			variable_get('dmmdb_link_color', '1387dc')));		        				        		
+		        break;
+		    }
+		    return $block;
+		break;
+	}
+  
+}
+
+
+/*
+function dmmdb_content($feed_url){
+	 $feed_url = "http://feeds.feedburner.com/nettuts";
+     $content = file_get_contents($feed_url);  
+     $x = new SimpleXmlElement($content);     
+    
+     $retorn = "<ul>";   
+     foreach($x->channel->item as $entry) {  
+         $retorn.= "<li><a href='$entry->link' title='$entry->title'>" . $entry->title . "</a></li>";  
+     }
+     $retorn.= "</ul>";     
+     return $retorn;
+}  
+*/
+	/*
+    if ($handle = opendir(variable_get('rimage_directory', ''))) {
+        $files = array();
+        while (false !== ($file = readdir($handle))) {
+            if ($file != '.' && $file != '..') {
+                $files[] =  $file;
+            }
+        }
+    
+        closedir($handle);
+        $index = rand(0, count($files) - 1); 
+        $file = $files[$index];
+
+        $width  = variable_get('rimage_width', '');
+        $height = variable_get('rimage_height', '');
+        return '<img src="'.variable_get('rimage_prefix', '')
+            .'/'.variable_get('rimage_directory', '').'/'
+            .$file.'"'
+            . ($width ? " width=\"$width\"": '') . ( $height ? " height=\"$height\"": '').'>';
+    }
+    return 'El directorio no contiene imagenes. Puede configurarlo en '.l(t('la pagina de configuracion'), 'admin/build/block/configure/rimage/0');
+    */
+ 
+ 

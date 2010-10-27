@@ -1,0 +1,4 @@
+; $Id$
+name = Dmmdb
+description = Dmmdb module for Drupal! Create a block, e.g. a dmmdb page in your Drupal!
+core = 6.x
